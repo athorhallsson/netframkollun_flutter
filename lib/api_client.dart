@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'models/order.dart';
+import 'models/photo_order_prices.dart';
 import 'models/photo.dart';
 import 'models/photo_size.dart';
 import 'models/sizes.dart';
@@ -21,6 +22,22 @@ class ApiClient {
     Order order = Order.fromJson(json.decode(response.body));
 
     return order;
+  }
+
+  Future<PhotoOrderPrices> getPhotoOrderPrices(String orderToken) async {
+    try{
+      var url = baseUrl + "/api/v1/photoorders/" + orderToken + "/price";
+      var response = await http.post(url, body: {});
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      return PhotoOrderPrices.fromJson(json.decode(response.body));
+    }
+    catch(e){
+      print("Failed to get photo order prices");
+      print(e);
+      throw e;
+    }
   }
 
   Future<List<PhotoSize>> getSizes() async {
