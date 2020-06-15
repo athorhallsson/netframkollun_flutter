@@ -95,12 +95,12 @@ class PhotoItemDialog extends StatelessWidget {
                           alignment: MainAxisAlignment.center,
                           children: <Widget>[
                             RaisedButton(
-                              child: Text("eyða"),
+                              child: Text("Eyða"),
                               onPressed: () => null, // appState.deletePhotoAction(appState.getCurrentPhoto),
                             ),
                             RaisedButton(
                                 onPressed: () => appState.updatePhotoAction(appState.getCurrentPhoto),
-                                child: Text("vista")
+                                child: Text("Vista")
                             )
                           ],
                         ),
