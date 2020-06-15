@@ -10,7 +10,7 @@ import 'models/sizes.dart';
 class ApiClient {
 
   String baseUrl = 'http://localhost:8080';
-//  String baseUrl = 'https://kortavefur-172121.appspot.com';
+ // String baseUrl = 'https://named-idiom-277810.appspot.com';
 
   Future<Order> createNewOrder() async {
     var url = baseUrl + "/api/v1/photoorders";
