@@ -1,5 +1,6 @@
 import 'package:netframkollun_flutter/api_client.dart';
 import 'package:flutter/material.dart';
+import 'package:netframkollun_flutter/models/price_item.dart';
 
 import 'models/order.dart';
 import 'models/photo.dart';
@@ -22,6 +23,9 @@ class AppState with ChangeNotifier {
   List<String> _postCodes = ["600", "601", "603", "606"];
   List<int> _quantities = List.generate(100, (i) => i + 1);
 
+  List<PriceItem> _priceItems = new List();
+  bool _priceLoading = false;
+
   void createOrderAction() {
     apiClient.createNewOrder().then((order) =>
       _setOrder(order)
@@ -43,10 +47,19 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
+  void getPricesAction() {
+    _priceLoading = true;
+    notifyListeners();
+    apiClient.getPhotoOrderPrices(_order.token).then((prices) =>
+        _setPrices(prices.priceItems)
+    );
+  }
+
   void changePickupAction(bool pickup) {
     print("new pickup value " + pickup.toString());
     _order.pickup = pickup;
     notifyListeners();
+    getPricesAction();
   }
 
   void changePhoneAction(String phone) {
@@ -116,10 +129,17 @@ class AppState with ChangeNotifier {
   void _addPhoto(Photo photo) {
     _photos.add(photo);
     notifyListeners();
+    getPricesAction();
   }
 
   void _setSizes(List<PhotoSize> sizes) {
     _sizes = sizes;
+    notifyListeners();
+  }
+
+  void _setPrices(List<PriceItem> prices) {
+    _priceItems = prices;
+    _priceLoading = false;
     notifyListeners();
   }
 
@@ -132,6 +152,7 @@ class AppState with ChangeNotifier {
     }
     _currentPhoto = null;
     notifyListeners();
+    getPricesAction();
   }
 
   void _removePhoto(int photoId) {
@@ -147,4 +168,8 @@ class AppState with ChangeNotifier {
   List<PhotoSize> get getSizes => _sizes;
   List<int> get getQuantities => _quantities;
   List<String> get getPostCodes => _postCodes;
+
+  List<PriceItem> get getPriceItems => _priceItems;
+  bool get isPriceLoading => _priceLoading;
+  int get getTotalPrice => _priceItems.fold(0, (previous, current) => previous + (current.count * current.price));
 }

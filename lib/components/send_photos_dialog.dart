@@ -134,6 +134,12 @@ class SendPhotosDialogState extends State<SendPhotosDialog> {
               ),
               Center(
                 child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: appState.isPriceLoading ? CircularProgressIndicator() : Text(appState.getTotalPrice.toString() + ' kr.'),
+                ),
+              ),
+              Center(
+                child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: RaisedButton(
                     onPressed: () {
@@ -142,7 +148,7 @@ class SendPhotosDialogState extends State<SendPhotosDialog> {
                       if (_formKey.currentState.validate()) {
                         // If the form is valid, display a Snackbar.
                         Scaffold.of(context)
-                            .showSnackBar(SnackBar(content: Text('Processing Data')));
+                            .showSnackBar(SnackBar(content: Text('Sendi pöntun')));
                       }
                     },
                     child: Text('Senda inn pöntun'),
